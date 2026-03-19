@@ -3,15 +3,19 @@ import json
 from datetime import datetime, timedelta
 from nba_api.stats.endpoints import boxscoretraditionalv3
 import time
+from utils import get_or_create_full_path
 
 now = datetime.now()
-yesterday = now - timedelta(days=2)
+yesterday = now - timedelta(days=1)
 
 
 def pull_players_stats() -> list[dict]:
-
-    with open(f"data/raw/games/{yesterday.strftime('%m-%d-%Y')}_games.json", "r") as f:
-        games = json.load(f)
+    try:   
+        with open(f"data/raw/games/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json", "r") as f:
+            games = json.load(f)
+    except FileNotFoundError:
+        print("No games data available for the specified date. Cannot pull player stats.")
+        return []
     
     game_ids = [game.get("GAME_ID") for game in games]
     game_ids = list(set(game_ids))
@@ -43,7 +47,8 @@ def pull_players_stats() -> list[dict]:
 
 def main():
     players_stats = pull_players_stats()
-    with open(f"data/raw/players_stats/{yesterday.strftime('%m-%d-%Y')}_player_stats.json", "w") as f:
+    file_path = get_or_create_full_path(f"data/raw/players_stats/{yesterday.year}/{yesterday.month}/{yesterday.day}_player_stats.json")
+    with open(file_path.as_posix(), "w") as f:
         json.dump(players_stats, f, indent=4)
 
 if __name__ == "__main__":

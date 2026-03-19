@@ -4,6 +4,8 @@ import json
 import time
 import requests
 from urllib3 import HTTPSConnectionPool
+from utils import get_or_create_full_path
+
 
 def pull_players() -> list[dict]:
     """Pulls all players from the NBA API and returns them as a list of dictionaries."""
@@ -11,7 +13,7 @@ def pull_players() -> list[dict]:
 
 
 def main():
-    playersExapnded = []
+    expanded_players = []
     players = pull_players()
     for player in players:
         try:
@@ -28,7 +30,7 @@ def main():
             player["height"] = common_player_info_dict.get("HEIGHT")
             player["weight"] = common_player_info_dict.get("WEIGHT")
             player["team_id"] = common_player_info_dict.get("TEAM_ID")
-            playersExapnded.append(player)
+            expanded_players.append(player)
             time.sleep(0.5)
         
         except requests.exceptions.ReadTimeout:
@@ -37,8 +39,9 @@ def main():
         except requests.RequestException as e:
             print(f"Error occurred for player: {player.get('full_name')}, Error: {e}")
 
-    with open("data/raw/players.json", "w") as f:
-        json.dump(playersExapnded, f, indent=4)
+    file_path = get_or_create_full_path("data/raw/players.json")
+    with open(file_path.as_posix(), "w") as f:
+        json.dump(expanded_players, f, indent=4)
 
 
 if __name__ == "__main__":

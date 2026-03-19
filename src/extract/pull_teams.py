@@ -1,5 +1,6 @@
 from nba_api.stats.static import teams as Teams
 import json
+from utils import get_or_create_full_path
 
 
 def pull_teams() -> list[dict]:
@@ -9,7 +10,8 @@ def pull_teams() -> list[dict]:
 
 def main():
     teams = pull_teams()
-    with open("data/raw/teams.json", "w") as f:
+    file_path = get_or_create_full_path("data/raw/teams.json")
+    with open(file_path.as_posix(), "w") as f:
         json.dump(teams, f, indent=4)
 
 

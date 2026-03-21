@@ -1,14 +1,11 @@
 from sqlalchemy import Engine, create_engine
 import json
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 import numpy as np
 
-engine = create_engine("sqlite:///db/nba_wh.db")
-now = datetime.now()
-yesterday = now - timedelta(days=1)
 
-def clean_games(engine: Engine):
+def clean_games(engine: Engine, yesterday: datetime):
     """
     Reads the raw games data from the JSON file, processes it to identify home and away teams, and then merges the data to create a clean DataFrame. Finally, it writes the cleaned data to a staging table in the database.
     """
@@ -42,6 +39,7 @@ def clean_games(engine: Engine):
         'pts_home': 'home_score',
     })
 
+    # cast to int for better storage and performance
     merged_games['game_id'] = pd.to_numeric(merged_games['game_id']).astype(np.int32)
     merged_games['date_id'] = pd.to_numeric(merged_games['date_id']).astype(np.int32)
     merged_games['home_team_id'] = merged_games['home_team_id'].astype(np.int32)
@@ -50,7 +48,3 @@ def clean_games(engine: Engine):
     merged_games['home_score'] = merged_games['home_score'].astype(np.int32)
 
     merged_games.to_sql("fact_games", con=engine, if_exists="append", index=False)
-
-
-if __name__ == "__main__":
-    clean_games(engine)

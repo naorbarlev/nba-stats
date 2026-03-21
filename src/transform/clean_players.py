@@ -49,7 +49,3 @@ def clean_players(engine: Engine):
         if_exists="replace",
         index=False
     )
-
-
-if __name__ == "__main__":
-    clean_players(engine)

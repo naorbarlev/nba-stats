@@ -5,10 +5,6 @@ from datetime import datetime, timedelta
 import numpy as np
 import re
 
-engine = create_engine("sqlite:///db/nba_wh.db")
-now = datetime.now()
-yesterday = now - timedelta(days=1)
-
 def minutes_to_seconds(series: pd.Series) -> pd.Series:
     def parse(x):
         try:
@@ -41,7 +37,7 @@ def to_snake_case(name: str) -> str:
     return s2.lower()
 
 
-def clean_players_stats(engine: Engine):
+def clean_players_stats(engine: Engine, yesterday: datetime):
     """
     Reads the raw games data from the JSON file, processes it to identify home and away teams, and then merges the data to create a clean DataFrame. Finally, it writes the cleaned data to a staging table in the database.
     """
@@ -68,8 +64,8 @@ def clean_players_stats(engine: Engine):
 
     df_game_stats = df_game_stats.drop(columns=["minutes"])
     df_game_stats = df_game_stats.rename(columns={"person_id": "player_id"})
+        
+    df_game_stats = df_game_stats.drop(columns=['free_throws_percentage', 'three_pointers_percentage', "field_goals_percentage", 'statistics', 'jersey_num', 'comment', 'position', 'player_slug', 'name_i', 'family_name', 'first_name'])
 
     df_game_stats.to_sql("fact_players_stats", con=engine, if_exists="append", index=False)
 
-if __name__ == "__main__":
-    clean_players_stats(engine)

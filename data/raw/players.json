@@ -271,7 +271,7 @@
         "is_active": true,
         "position": "Forward",
         "height": "6-9",
-        "weight": "215",
+        "weight": "224",
         "team_id": 1610612755
     },
     {
@@ -556,8 +556,8 @@
         "last_name": "Broome",
         "is_active": true,
         "position": "Forward",
-        "height": "6-10",
-        "weight": "235",
+        "height": "6-9",
+        "weight": "244",
         "team_id": 1610612755
     },
     {
@@ -1371,7 +1371,7 @@
         "is_active": true,
         "position": "Guard",
         "height": "6-4",
-        "weight": "180",
+        "weight": "190",
         "team_id": 1610612755
     },
     {
@@ -1393,7 +1393,7 @@
         "is_active": true,
         "position": "Forward",
         "height": "6-7",
-        "weight": "203",
+        "weight": "217",
         "team_id": 1610612755
     },
     {
@@ -1415,7 +1415,7 @@
         "is_active": true,
         "position": "Center-Forward",
         "height": "7-0",
-        "weight": "280",
+        "weight": "270",
         "team_id": 1610612755
     },
     {
@@ -1657,7 +1657,7 @@
         "is_active": true,
         "position": "Forward",
         "height": "6-8",
-        "weight": "220",
+        "weight": "230",
         "team_id": 1610612755
     },
     {
@@ -1854,8 +1854,8 @@
         "last_name": "Grimes",
         "is_active": true,
         "position": "Guard",
-        "height": "6-4",
-        "weight": "210",
+        "height": "6-5",
+        "weight": "207",
         "team_id": 1610612755
     },
     {
@@ -3890,7 +3890,7 @@
         "is_active": true,
         "position": "Forward-Guard",
         "height": "6-8",
-        "weight": "203",
+        "weight": "210",
         "team_id": 1610612755
     },
     {
@@ -5419,7 +5419,7 @@
         "is_active": true,
         "position": "Guard-Forward",
         "height": "6-8",
-        "weight": "237",
+        "weight": "245",
         "team_id": 1610612755
     },
     {

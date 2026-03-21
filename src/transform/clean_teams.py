@@ -3,9 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 
-engine = create_engine("sqlite:///db/nba_wh.db")
-
-
 def clean_teams(engine: Engine):
     try:
         with open("data/raw/teams.json") as f:
@@ -26,7 +23,3 @@ def clean_teams(engine: Engine):
         if_exists="replace",
         index=False
     )
-
-
-if __name__ == "__main__":
-    clean_teams(engine)

@@ -3,7 +3,6 @@ from nba_api.stats.endpoints import commonplayerinfo
 import json
 import time
 import requests
-from urllib3 import HTTPSConnectionPool
 from utils import get_or_create_full_path
 
 
@@ -11,14 +10,18 @@ def pull_players() -> list[dict]:
     """Pulls all players from the NBA API and returns them as a list of dictionaries."""
     return Players.get_players()
 
-
-def main():
+def pull_players_and_save():
     expanded_players = []
     players = pull_players()
+    retries = 0
     for player in players:
+
+        if player.get("is_active") == False:
+            continue
+        if retries >= 2:
+            print("Maximum retries reached. continuing with the next player.")
+            continue
         try:
-            if player.get("is_active") == False:
-                continue
             common_player_info_res = commonplayerinfo.CommonPlayerInfo(player_id=player.get("id"), timeout=180).get_dict()
             if not common_player_info_res.get("resultSets"):
                 continue
@@ -31,18 +34,24 @@ def main():
             player["weight"] = common_player_info_dict.get("WEIGHT")
             player["team_id"] = common_player_info_dict.get("TEAM_ID")
             expanded_players.append(player)
-            time.sleep(0.5)
+            retries = 0
+            time.sleep(1.5)
         
         except requests.exceptions.ReadTimeout:
             print(f"Read timeout occurred for player: {player.get('full_name')}. Retrying after 60 seconds...")
             time.sleep(60)
+            retries += 1
         except requests.RequestException as e:
             print(f"Error occurred for player: {player.get('full_name')}, Error: {e}")
+            retries += 1
 
     file_path = get_or_create_full_path("data/raw/players.json")
+    # with open(file_path.as_posix(), "r") as f:
+    #     previously_expanded_players = json.load(f)
+    
+    # if len(previously_expanded_players) > len(expanded_players):
+    #         print("Using previously saved expanded players data due to API issues.")
+    #         return
+
     with open(file_path.as_posix(), "w") as f:
         json.dump(expanded_players, f, indent=4)
-
-
-if __name__ == "__main__":
-    main()

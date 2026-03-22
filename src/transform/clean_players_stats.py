@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 import re
-
+from utils import PLAYERS_STATS_PATH
 def minutes_to_seconds(series: pd.Series) -> pd.Series:
     def parse(x):
         try:
@@ -42,7 +42,7 @@ def clean_players_stats(engine: Engine, yesterday: datetime):
     Reads the raw games data from the JSON file, processes it to identify home and away teams, and then merges the data to create a clean DataFrame. Finally, it writes the cleaned data to a staging table in the database.
     """
     try:
-        with open(f"data/raw/players_stats/{yesterday.year}/{yesterday.month}/{yesterday.day}_player_stats.json") as f:
+        with open(f"{PLAYERS_STATS_PATH}/{yesterday.year}/{yesterday.month}/{yesterday.day}_player_stats.json") as f:
                 data = json.load(f)
     except FileNotFoundError:
         print("No player stats data available for the specified date.")

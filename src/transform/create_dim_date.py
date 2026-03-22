@@ -1,6 +1,13 @@
 import pandas as pd
-from sqlalchemy import Engine
+from sqlalchemy import Engine, create_engine
+import sys
+from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from utils import SQLITE_URL
+
+engine = create_engine(SQLITE_URL)
 
 def build_dim_date(engine: Engine, start_date="2000-01-01", end_date="2030-12-31"):
     dates = pd.date_range(start=start_date, end=end_date)
@@ -20,7 +27,8 @@ def build_dim_date(engine: Engine, start_date="2000-01-01", end_date="2030-12-31
     df.to_sql(
     "dim_date",
     engine,
-    if_exists="replace",  # only once
+    if_exists="replace",
     index=False
 )
 
+build_dim_date(engine)

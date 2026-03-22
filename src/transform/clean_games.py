@@ -3,6 +3,7 @@ import json
 import pandas as pd
 from datetime import datetime
 import numpy as np
+from utils import GAMES_PATH
 
 
 def clean_games(engine: Engine, yesterday: datetime):
@@ -10,10 +11,10 @@ def clean_games(engine: Engine, yesterday: datetime):
     Reads the raw games data from the JSON file, processes it to identify home and away teams, and then merges the data to create a clean DataFrame. Finally, it writes the cleaned data to a staging table in the database.
     """
     try:
-        with open(f"data/raw/games/{yesterday.strftime('%m-%d-%Y')}_games.json") as f:
+        with open(f"{GAMES_PATH}/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json") as f:
                 data = json.load(f)
     except FileNotFoundError:
-        print("No games data available for the specified date.")
+        print(f"No games data available for the specified date. {GAMES_PATH}/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json")
         return
 
     df_games = pd.DataFrame(data)
@@ -46,5 +47,7 @@ def clean_games(engine: Engine, yesterday: datetime):
     merged_games['away_team_id'] = merged_games['away_team_id'].astype(np.int32)
     merged_games['away_score'] = merged_games['away_score'].astype(np.int32)
     merged_games['home_score'] = merged_games['home_score'].astype(np.int32)
+
+    print(merged_games.info())
 
     merged_games.to_sql("fact_games", con=engine, if_exists="append", index=False)

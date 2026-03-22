@@ -1,0 +1,13 @@
+{
+  "database": {
+    "type": "sqlite",
+    "path": "db/nba_wh.db"
+  },
+  "paths": {
+    "raw_data": "data/raw",
+    "games": "data/raw/games",
+    "players_stats": "data/raw/players_stats",
+    "players": "data/raw/players.json",
+    "teams": "data/raw/teams.json"
+  }
+}

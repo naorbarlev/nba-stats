@@ -4,10 +4,10 @@ from extract.pull_player_stats import pull_players_stats_and_save
 from transform.clean_games import clean_games
 from transform.clean_players_stats import clean_players_stats
 
-from utils import get_yesterday_date
+from utils import get_yesterday_date, SQLITE_URL
 
 yesterday = get_yesterday_date()
-engine = create_engine("sqlite:///db/nba_wh.db")
+engine = create_engine(SQLITE_URL)
 
 def run_pipeline():
     print("Starting the NBA data pipeline...")

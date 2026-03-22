@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, text
+from utils import SQLITE_URL
 
-engine = create_engine("sqlite:///db/nba_wh.db")
+engine = create_engine(SQLITE_URL)
 
 with engine.connect() as conn:
     conn.execute(text("""

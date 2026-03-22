@@ -26,14 +26,18 @@ def get_top_players(stats_df, game_id, home_team_id, away_team_id):
 
 
 def render_player(player, team_name):
-
-    col_img, col_stats = st.columns([1, 1])
-
-    with col_img:
-        st.image(get_player_image(player["player_id"]), use_container_width=True)
-
-    with col_stats:
-        st.markdown(f"### {player['player_name']}")
+    # Center the player image
+    st.image(get_player_image(player["player_id"]), width=400)
+    
+    # Player info
+    st.markdown(f"### {player['player_name']} \n ##### Position: {player['position']} | Height: {player['height']} cm")
+    
+    # Title
+    st.markdown(f"### Game Stats:")
+    # Stats in a more compact layout
+    col1, col2 = st.columns(2)
+    
+    with col1:
         st.write(f"🏀 Points: {player['points']}")
         st.write(f"🔄 Offensive Rebounds: {player['offensive_rebounds']}")
         st.write(f"🔄 Defensive Rebounds: {player['defensive_rebounds']}")
@@ -41,6 +45,8 @@ def render_player(player, team_name):
         st.write(f"⛔ Blocks: {player['blocks']}")
         st.write(f"🛡️ Steals: {player['steals']}")
         st.write(f"⛔ Turnovers: {player['turnovers']}")
+    
+    with col2:
         st.write(f"🕒 Minutes Played: {int(player['minutes_played'])}")
         st.write(f"🎯 FG %: {player['field_goal_percentage'] * 100:.1f}%")
         st.write(f"🏹 3P %: {player['three_point_percentage'] * 100:.1f}%")
@@ -83,7 +89,7 @@ with col1:
     logo_col, name_col = st.columns([1, 3])
     
     with logo_col:
-        st.image(get_team_logo(selected_row["home_team_id"]), width=60)
+        st.image(get_team_logo(selected_row["home_team_id"]), width=100)
     
     with name_col:
         st.markdown(f"### {selected_row['home_team_name']}")
@@ -103,7 +109,7 @@ with col3:
         st.markdown(f"### {selected_row['away_team_name']}")
     
     with logo_col:
-        st.image(get_team_logo(selected_row["away_team_id"]), width=60)
+        st.image(get_team_logo(selected_row["away_team_id"]), width=100)
 
 game_id = selected_row["game_id"]
 home_team_id = selected_row["home_team_id"]
@@ -114,8 +120,8 @@ top_home, top_away = get_top_players(
     stats_df, game_id, home_team_id, away_team_id
 )
 
-# Layout
-col1, col2 = st.columns(2)
+# Layout - centered players
+empty_col, col1, col2, empty_col2 = st.columns([1, 2, 2, 1])
 
 with col1:
     render_player(top_home, selected_row["home_team_name"])

@@ -1,4 +1,4 @@
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import Engine
 import json
 import pandas as pd
 from datetime import datetime

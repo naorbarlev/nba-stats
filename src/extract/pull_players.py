@@ -34,6 +34,7 @@ def pull_players_and_save():
             player["height"] = common_player_info_dict.get("HEIGHT")
             player["weight"] = common_player_info_dict.get("WEIGHT")
             player["team_id"] = common_player_info_dict.get("TEAM_ID")
+            player["birthdate"] = common_player_info_dict.get("BIRTHDATE")
             expanded_players.append(player)
             retries = 0
             time.sleep(1.5)

@@ -60,10 +60,11 @@ with engine.connect() as conn:
             first_name TEXT,
             last_name TEXT,
             position TEXT,
-            team_id INTEGER
+            team_id INTEGER,
             height INTEGER,
             weight INTEGER,
-            is_active BOOLEAN
+            is_active BOOLEAN,
+            birthdate TEXT
         );
     """))
 

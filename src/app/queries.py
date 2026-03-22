@@ -73,7 +73,9 @@ def load_player_stats_for_game(game_id):
         CASE WHEN fps.free_throws_attempted > 0 
              THEN fps.free_throws_made * 1.0 / fps.free_throws_attempted 
              ELSE NULL END AS free_throw_percentage,
-        dp.full_name AS player_name
+        dp.full_name AS player_name,
+        dp.position,
+        dp.height
     FROM fact_games f
     JOIN fact_players_stats fps 
         ON f.game_id = fps.game_id

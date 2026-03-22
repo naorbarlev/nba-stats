@@ -8,8 +8,10 @@ import queries
 def get_player_image(player_id):
     return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
 
+
 def get_team_logo(team_id):
     return f"https://cdn.nba.com/logos/nba/{team_id}/primary/L/logo.svg"
+
 
 def get_top_players(stats_df, game_id, home_team_id, away_team_id):
     game_df = stats_df[stats_df["game_id"] == game_id]
@@ -36,8 +38,8 @@ def render_player(player, team_name):
         st.write(f"🔄 Offensive Rebounds: {player['offensive_rebounds']}")
         st.write(f"🔄 Defensive Rebounds: {player['defensive_rebounds']}")
         st.write(f"🎯 Assists: {player['assists']}")
-        st.write(f"🛡️ Steals: {player['steals']}")
         st.write(f"⛔ Blocks: {player['blocks']}")
+        st.write(f"🛡️ Steals: {player['steals']}")
         st.write(f"⛔ Turnovers: {player['turnovers']}")
         st.write(f"🕒 Minutes Played: {int(player['minutes_played'])}")
         st.write(f"🎯 FG %: {player['field_goal_percentage'] * 100:.1f}%")
@@ -53,7 +55,6 @@ st.set_page_config(layout="wide")
 st.title("🏀 NBA Game Leaders")
 
 games_df = queries.get_games()
-stats_df = queries.load_player_stats()
 
 games_df["label"] = (
     games_df["home_team_name"]
@@ -70,6 +71,9 @@ games_df["label"] = (
 selected_label = st.selectbox("Select Game", games_df["label"])
 
 selected_row = games_df[games_df["label"] == selected_label].iloc[0]
+
+# Load player stats only for the selected game
+stats_df = queries.load_player_stats_for_game(selected_row["game_id"])
 
 # Match header
 col1, col2, col3 = st.columns([2, 1, 2])

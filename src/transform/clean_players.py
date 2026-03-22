@@ -3,10 +3,10 @@ import json
 import pandas as pd
 import re
 import numpy as np
+from utils import PLAYERS_PATH
 
 WEIGHT_CONVERSION_FACTOR = 0.45359237
 
-engine = create_engine("sqlite:///db/nba_wh.db")
 
 def convert_height_str_to_cm(height_str):
     """
@@ -24,7 +24,7 @@ def convert_height_str_to_cm(height_str):
     
 
 def clean_players(engine: Engine):
-    with open("data/raw/players.json") as f:
+    with open(PLAYERS_PATH) as f:
         data = json.load(f)
     
     plyaers_df = pd.DataFrame(data)

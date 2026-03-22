@@ -11,11 +11,11 @@ from utils import SQLITE_URL
 engine = create_engine(SQLITE_URL)
 
 def run_pipeline():
-    # print("Starting the NBA data pipeline...")
-    # print("Pulling players data...")
-    # pull_players_and_save()
-    # print("Pulling teams data...")
-    # pull_teams_and_save()
+    print("Starting the NBA data pipeline...")
+    print("Pulling players data...")
+    pull_players_and_save()
+    print("Pulling teams data...")
+    pull_teams_and_save()
 
     print("Starting data transformation...")
     print("Cleaning players data...")

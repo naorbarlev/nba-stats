@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import re
 from utils import PLAYERS_STATS_PATH
+
 def minutes_to_seconds(series: pd.Series) -> pd.Series:
     def parse(x):
         try:

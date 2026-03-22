@@ -1,11 +1,12 @@
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import Engine
 import json
 import numpy as np
 import pandas as pd
+from utils import TEAMS_PATH
 
 def clean_teams(engine: Engine):
     try:
-        with open("data/raw/teams.json") as f:
+        with open(TEAMS_PATH) as f:
                 data = json.load(f)
     except FileNotFoundError:
         print("No teams data available.")

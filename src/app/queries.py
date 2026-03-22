@@ -44,43 +44,6 @@ def get_games():
     return pd.read_sql(query, engine)
 
 
-@st.cache_data
-def load_player_stats():
-    engine = get_engine()
-    query = """
-    SELECT 
-        f.game_id,
-        f.home_team_id,
-        f.away_team_id,
-        fps.player_id,
-        fps.team_id,
-        fps.points,
-        fps.rebounds_offensive AS offensive_rebounds,
-        fps.rebounds_defensive AS defensive_rebounds,
-        fps.assists,
-        fps.steals,
-        fps.blocks,
-        fps.turnovers,
-        fps.minutes_seconds / 60.0 AS minutes_played,
-        fps.plus_minus_points,
-        CASE WHEN fps.field_goals_attempted > 0 
-             THEN fps.field_goals_made * 1.0 / fps.field_goals_attempted 
-             ELSE NULL END AS field_goal_percentage,
-        CASE WHEN fps.three_pointers_attempted > 0 
-             THEN fps.three_pointers_made * 1.0 / fps.three_pointers_attempted 
-             ELSE NULL END AS three_point_percentage,
-        CASE WHEN fps.free_throws_attempted > 0 
-             THEN fps.free_throws_made * 1.0 / fps.free_throws_attempted 
-             ELSE NULL END AS free_throw_percentage,
-        dp.full_name AS player_name
-    FROM fact_games f
-    JOIN fact_players_stats fps 
-        ON f.game_id = fps.game_id
-    JOIN dim_players dp 
-        ON fps.player_id = dp.id
-    """
-    return pd.read_sql(query, engine)
-
 
 @st.cache_data
 def load_player_stats_for_game(game_id):

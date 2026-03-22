@@ -1,8 +1,7 @@
 from nba_api.stats.endpoints import leaguegamefinder
 import json
 from datetime import datetime, timedelta
-from utils import get_or_create_full_path
-
+from utils import get_or_create_full_path, GAMES_PATH
 
 
 def pull_games(yesterday: datetime) -> list[dict]:
@@ -19,6 +18,6 @@ def pull_games(yesterday: datetime) -> list[dict]:
 
 def pull_games_and_save(yesterday: datetime):
     games = pull_games(yesterday)
-    file_path = get_or_create_full_path(f"data/raw/games/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json")
+    file_path = get_or_create_full_path(f"{GAMES_PATH}/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json")
     with open(file_path.as_posix(), "w") as f:
         json.dump(games, f, indent=4)

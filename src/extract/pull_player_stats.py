@@ -4,12 +4,12 @@ from datetime import datetime
 from nba_api.stats.endpoints import boxscoretraditionalv3
 import time
 import requests
-from utils import get_or_create_full_path
+from utils import get_or_create_full_path, GAMES_PATH, PLAYERS_STATS_PATH
 
 
 def pull_players_stats(yesterday: datetime) -> list[dict]:
     try:   
-        with open(f"data/raw/games/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json", "r") as f:
+        with open(f"{GAMES_PATH}/{yesterday.year}/{yesterday.month}/{yesterday.day}_games.json", "r") as f:
             games = json.load(f)
     except FileNotFoundError:
         print("No games data available for the specified date. Cannot pull player stats.")
@@ -55,6 +55,6 @@ def pull_players_stats(yesterday: datetime) -> list[dict]:
 
 def pull_players_stats_and_save(yesterday: datetime):
     players_stats = pull_players_stats(yesterday)
-    file_path = get_or_create_full_path(f"data/raw/players_stats/{yesterday.year}/{yesterday.month}/{yesterday.day}_player_stats.json")
+    file_path = get_or_create_full_path(f"{PLAYERS_STATS_PATH}/{yesterday.year}/{yesterday.month}/{yesterday.day}_player_stats.json")
     with open(file_path.as_posix(), "w") as f:
         json.dump(players_stats, f, indent=4)

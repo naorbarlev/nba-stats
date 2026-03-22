@@ -3,7 +3,7 @@ from nba_api.stats.endpoints import commonplayerinfo
 import json
 import time
 import requests
-from utils import get_or_create_full_path
+from utils import get_or_create_full_path, PLAYERS_PATH
 
 
 def pull_players() -> list[dict]:
@@ -16,7 +16,8 @@ def pull_players_and_save():
     retries = 0
     for player in players:
 
-        if player.get("is_active") == False:
+        # We only want to pull data for active players, and we want to avoid getting stuck on a player that causes repeated API errors, so we will skip players that are not active and we will retry a player up to 2 times before skipping them.
+        if player.get("is_active") == False: 
             continue
         if retries >= 2:
             print("Maximum retries reached. continuing with the next player.")
@@ -41,17 +42,21 @@ def pull_players_and_save():
             print(f"Read timeout occurred for player: {player.get('full_name')}. Retrying after 60 seconds...")
             time.sleep(60)
             retries += 1
+        except requests.exceptions.ConnectionError:
+            print(f"Connection error occurred for player: {player.get('full_name')}. Retrying after 60 seconds...")
+            time.sleep(60)
+            retries += 1
         except requests.RequestException as e:
             print(f"Error occurred for player: {player.get('full_name')}, Error: {e}")
             retries += 1
 
-    file_path = get_or_create_full_path("data/raw/players.json")
-    # with open(file_path.as_posix(), "r") as f:
-    #     previously_expanded_players = json.load(f)
+    file_path = get_or_create_full_path(PLAYERS_PATH)
+    with open(file_path.as_posix(), "r") as f:
+        previously_expanded_players = json.load(f)
     
-    # if len(previously_expanded_players) > len(expanded_players):
-    #         print("Using previously saved expanded players data due to API issues.")
-    #         return
+    if len(previously_expanded_players) > len(expanded_players):
+            print("Using previously saved expanded players data due to API issues.")
+            return
 
     with open(file_path.as_posix(), "w") as f:
         json.dump(expanded_players, f, indent=4)

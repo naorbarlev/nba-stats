@@ -1,8 +1,7 @@
 from sqlalchemy import create_engine
 from extract.pull_games import pull_games_and_save
 from extract.pull_player_stats import pull_players_stats_and_save
-from transform.clean_games import clean_games
-from transform.clean_players_stats import clean_players_stats
+from transform.clean_raw_data import clean_games, clean_players_stats
 
 from utils import get_yesterday_date, SQLITE_URL
 

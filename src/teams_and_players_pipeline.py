@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 from extract.pull_teams import pull_teams_and_save
 from extract.pull_players import pull_players_and_save
 
-from transform.clean_players import clean_players
-from transform.clean_teams import clean_teams
+from transform.clean_raw_data import clean_teams, clean_players
+
 from utils import SQLITE_URL
 
 

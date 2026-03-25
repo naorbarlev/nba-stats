@@ -77,17 +77,11 @@ python src/extract/pull_player_stats.py
 python src/extract/pull_players.py
 python src/extract/pull_teams.py
 
-# Transform data
-python src/transform/clean_games.py
-python src/transform/clean_players_stats.py
-python src/transform/clean_players.py
-python src/transform/clean_teams.py
-
 # Run the dashboard
-streamlit run src/app/app.py
+python src/app/app.py
 ```
 
-### Streamlit Dashboard
+### Flask Dashboard
 
 The interactive dashboard allows you to:
 - Browse all NBA games with scores
@@ -96,7 +90,7 @@ The interactive dashboard allows you to:
 - Compare team performances
 
 ```bash
-streamlit run src/app/app.py
+python src/app/app.py
 ```
 
 ## ⚙️ Configuration
@@ -143,11 +137,9 @@ All configuration is managed through `config.json`:
     │   ├── pull_players.py
     │   └── pull_teams.py
     ├── transform/         # Data transformation modules
-    │   ├── clean_games.py
-    │   ├── clean_players_stats.py
-    │   ├── clean_players.py
-    │   ├── clean_teams.py
-    │   └── create_dim_date.py
+    │   ├── clean_raw_data.py
+    │   ├── create_dim_date.py
+    │   └── __init__.py
     ├── schema.py          # Database schema setup
     ├── teams_and_players_pipeline.py
     ├── games_and_stats_pipeline.py
@@ -249,78 +241,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Note**: This project is for educational purposes. Please respect NBA API usage policies and terms of service.
-
-### Fact Tables
-
-#### `fact_games`
-```sql
-CREATE TABLE fact_games (
-    game_id INTEGER PRIMARY KEY,
-    date_id INTEGER,
-    home_team_id INTEGER,
-    away_team_id INTEGER,
-    home_score INTEGER,
-    away_score INTEGER
-);
-```
-
-#### `fact_players_stats`
-```sql
-CREATE TABLE fact_players_stats (
-    player_id INTEGER,
-    game_id INTEGER,
-    team_id INTEGER,
-    field_goals_made INTEGER,
-    field_goals_attempted INTEGER,
-    three_pointers_made INTEGER,
-    three_pointers_attempted INTEGER,
-    free_throws_made INTEGER,
-    free_throws_attempted INTEGER,
-    rebounds_offensive INTEGER,
-    rebounds_defensive INTEGER,
-    rebounds_total INTEGER,
-    assists INTEGER,
-    steals INTEGER,
-    blocks INTEGER,
-    turnovers INTEGER,
-    fouls_personal INTEGER,
-    points INTEGER,
-    plus_minus_points REAL,
-    minutes_seconds INTEGER,
-    minutes_float INTEGER,
-    PRIMARY KEY (game_id, player_id)
-);
-```
-
-### Dimension Tables
-
-#### `dim_players`
-```sql
-CREATE TABLE dim_players (
-    id INTEGER PRIMARY KEY,
-    full_name TEXT,
-    first_name TEXT,
-    last_name TEXT,
-    position TEXT,
-    team_id INTEGER,
-    height INTEGER,
-    weight INTEGER,
-    is_active BOOLEAN
-);
-```
-
-#### `dim_teams`
-```sql
-CREATE TABLE dim_teams (
-    id INTEGER PRIMARY KEY,
-    full_name TEXT,
-    abbreviation TEXT,
-    nickname TEXT,
-    city TEXT,
-    state TEXT,
-    year_founded INTEGER
-);
-```
 
 ## 📄 License
 

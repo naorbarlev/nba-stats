@@ -68,26 +68,13 @@ A comprehensive ETL (Extract, Transform, Load) pipeline for NBA data that collec
    python src/games_and_stats_pipeline.py
    ```
 
-### Individual Pipeline Steps
 
-```bash
-# Extract data
-python src/extract/pull_games.py
-python src/extract/pull_player_stats.py
-python src/extract/pull_players.py
-python src/extract/pull_teams.py
-
-# Run the dashboard
-python src/app/app.py
-```
-
-### Flask Dashboard
+### Streamlit Dashboard
 
 The interactive dashboard allows you to:
 - Browse all NBA games with scores
 - View top performers for each game
 - Explore detailed player statistics
-- Compare team performances
 
 ```bash
 python src/app/app.py
@@ -227,20 +214,6 @@ CREATE TABLE dim_teams (
     year_founded INTEGER
 );
 ```
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- NBA API for providing comprehensive basketball data
-- Streamlit for the amazing dashboard framework
-- The data engineering community for inspiration and best practices
-
----
-
-**Note**: This project is for educational purposes. Please respect NBA API usage policies and terms of service.
 
 ## 📄 License
 

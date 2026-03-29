@@ -2,9 +2,7 @@ import streamlit as st
 import pandas as pd
 import queries
 
-# -----------------------------
-# HELPERS
-# -----------------------------
+
 def get_player_image(player_id):
     return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
 
@@ -16,16 +14,23 @@ def get_team_logo(team_id):
 def get_top_players(stats_df, game_id, home_team_id, away_team_id):
     game_df = stats_df[stats_df["game_id"] == game_id]
 
+    if game_df.empty:
+        return None, None
+
     home_df = game_df[game_df["team_id"] == home_team_id]
     away_df = game_df[game_df["team_id"] == away_team_id]
 
-    top_home = home_df.loc[home_df["points"].idxmax()]
-    top_away = away_df.loc[away_df["points"].idxmax()]
+    top_home = home_df.loc[home_df["points"].idxmax()] if not home_df.empty else None
+    top_away = away_df.loc[away_df["points"].idxmax()] if not away_df.empty else None
 
     return top_home, top_away
 
 
-def render_player(player, team_name):
+def render_player(player):
+
+    if player is None:
+        st.write("No player stats available for this team.")
+        return
     # Center the player image
     st.image(get_player_image(player["player_id"]), width=400)
     
@@ -54,9 +59,7 @@ def render_player(player, team_name):
         st.write(f"➕ Plus/Minus: {int(player['plus_minus_points'])}")
 
 
-# -----------------------------
 # UI
-# -----------------------------
 st.set_page_config(layout="wide")
 st.title("🏀 NBA Game Leaders")
 
@@ -124,7 +127,7 @@ top_home, top_away = get_top_players(
 empty_col, col1, col2, empty_col2 = st.columns([1, 2, 2, 1])
 
 with col1:
-    render_player(top_home, selected_row["home_team_name"])
+    render_player(top_home)
 
 with col2:
-    render_player(top_away, selected_row["away_team_name"])
+    render_player(top_away)

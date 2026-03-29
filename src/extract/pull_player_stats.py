@@ -47,6 +47,10 @@ def pull_players_stats(yesterday: datetime) -> list[dict]:
             time.sleep(60)
         except requests.RequestException as e:
             print(f"Error occurred for game: {game_id}, Error: {e}")
+        
+        except Exception as e:
+            print(f"Unexpected error occurred for game: {game_id}, Error: {e}")
+            continue
 
         
         time.sleep(1.5) # to avoid hitting the API rate limit

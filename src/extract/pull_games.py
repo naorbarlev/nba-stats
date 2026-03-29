@@ -1,6 +1,6 @@
 from nba_api.stats.endpoints import leaguegamefinder
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from utils import get_or_create_full_path, GAMES_PATH
 
 
@@ -9,9 +9,12 @@ def pull_games(yesterday: datetime) -> list[dict]:
     games = leaguegamefinder.LeagueGameFinder(
     date_from_nullable=yesterday.strftime("%m/%d/%Y"))
 
-    headers = games.get_dict().get("resultSets")[0].get("headers")
-    rows = games.get_dict().get("resultSets")[0].get("rowSet")
+    headers = games.get_dict().get("resultSets", [])[0].get("headers") if games.get_dict().get("resultSets", []) else None
+    rows = games.get_dict().get("resultSets", [])[0].get("rowSet", []) if games.get_dict().get("resultSets", []) else []    
     games_list = []
+    if not headers or not rows:
+        print("No games data found for the specified date.")
+        return games_list
     for row in rows:
         games_list.append(dict(zip(headers, row)))
     return games_list

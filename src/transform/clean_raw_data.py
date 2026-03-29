@@ -58,9 +58,6 @@ def minutes_to_float(series: pd.Series) -> pd.Series:
     return series.apply(parse).astype("float32")
 
 
-
-
-
 def clean_players_stats(engine: Engine, yesterday: datetime):
     """
     Reads the raw games data from the JSON file, processes it to identify home and away teams, and then merges the data to create a clean DataFrame. Finally, it writes the cleaned data to a staging table in the database.
@@ -162,8 +159,12 @@ def clean_teams(engine: Engine):
 
 
 def clean_players(engine: Engine):
-    with open(PLAYERS_PATH) as f:
-        data = json.load(f)
+    try:
+        with open(PLAYERS_PATH) as f:
+                data = json.load(f)
+    except FileNotFoundError:
+        print("No players data available.")
+        return
     
     plyaers_df = pd.DataFrame(data)
 

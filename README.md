@@ -77,7 +77,7 @@ The interactive dashboard allows you to:
 - Explore detailed player statistics
 
 ```bash
-python src/app/app.py
+streamlit run src/app/app.py
 ```
 
 ## ⚙️ Configuration
